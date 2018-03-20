@@ -10,6 +10,7 @@
 #include <pic18f14k22.h> 
 #include <stdbool.h>
 #include "euart.h"
+#include "pe42552.h"
  
 #define MAX_STR_SIZE 6
 #define ON 1
@@ -48,13 +49,21 @@ void interrupt high_isr (void){
     }
 }
 ///////////////////////////////////////////////////
-
+void init_controller(void);
 void init_interrupt(void);
 //void sleep(void);
 ////////////////////////////////////////////////////
 
 int main(int argc, char** argv) {
-    init_interrupt();
+    
+    
+    UART1PutStr("Device is ready!");
+    UART1PutStr("Send command in format:");
+    UART1PutStr("* - command start character, enable/disable amplifier"
+               "(0 - disable, 1 - enable), space,"
+    "attenuator in decibel (0.5 dB steps to 31.5 dB), % - command completion character.");
+    UART1PutStr("EXAMPLE: '*1 30%'.");
+    UART1PutStr(" Means enable amplifier, attenuator value 30 decibels.");
     
     while(1){
 //        sleep();
@@ -64,30 +73,38 @@ int main(int argc, char** argv) {
             switch_amp = array_char[FIRST_COM_INX];
             attenuator[0] =  array_char[3];
             attenuator[1] =  array_char[4];
+            
             switch(switch_amp){
                 case '0':
 //                    switch_PE42552(switch_amp);
 //                    attenuator_PE4312(attenuator);
-                    UART1PutStr("Усилитель отключен, аттенюатор:"+attenuator[0]+attenuator[1]);
+                    UART1PutStr("Amplifier DISABLE, attenuator is: ");
+                    UART1PutStr(attenuator);
                     break;
                 case '1':
 //                    switch_PE42552(switch_amp);
 //                    attenuator_PE4312(attenuator);
-                    UART1PutStr("Усилитель подключен, аттенюатор:"+attenuator[0]+attenuator[1]);
+                    UART1PutStr("Amplifier ENABLE, attenuator is: ");
+                    UART1PutStr(attenuator);
                     break;
                 default:
-                    UART1PutStr("Неверная команда");
-                    UART1PutStr("Отправте комаду в формате:");
-                    UART1PutStr("* - символ начала команды, номер подключения усилителя"
-                            "(0 - отключить, 1 - подключить), пробел,"
-                        "значение аттенюатора в децибелах (от 0,5 до 31,5 с шагом 0,5), # - символ завершения команды");
-                    UART1PutStr("Пример:");
-                    UART1PutStr("*1 30#");
-                    UART1PutStr("т.е. подключить усилитель, значение аттенюатора 30 децибел");
+                    UART1PutStr("Invalid command!");
+                    UART1PutStr("Send command in format:");
+                    UART1PutStr("* - command start character, enable/disable amplifier"
+                            "(0 - disable, 1 - enable), space,"
+                        "attenuator in decibel (0.5 dB steps to 31.5 dB), % - command completion character.");
+                    UART1PutStr("Example: '*1 30%'.");
+                    UART1PutStr(" Means enable amplifier, attenuator value 30 decibels.");
             }
         }
     }
     return (EXIT_SUCCESS);
+}
+
+void init_controller(void){
+    init_interrupt(void);
+    init_switch_PE42552(void);
+    UART1Init();
 }
 
 void init_interrupt(void){

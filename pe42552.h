@@ -12,7 +12,16 @@
 extern "C" {
 #endif
 
+#include <pic18f14k22.h> 
  
+#define PE42552_TRIS TRISCbits.RC0
+#define PE42552_PORT PORTCbits.C2INP
+#define RFC_RF1 1
+#define RFC_RF2 0
+
+///////////////////////////////////////////////
+void init_switch_PE42552(void);
+void switch_PE42552(int com_switch);
 
 
 #ifdef	__cplusplus
@@ -21,6 +30,4 @@ extern "C" {
 
 #endif	/* PE42552_H */
 
-typedef struct{
-    
-}pe42552;
+

@@ -1,5 +1,3 @@
-#include <pic18f14k22.h>
-
 #include "euart.h"
 
 
