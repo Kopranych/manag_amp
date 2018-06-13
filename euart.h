@@ -16,9 +16,9 @@ extern "C" {
 #include <string.h>
 #include <pic18f14k22.h>
     
-#define SYSCLKU 40000000L
-#define BAUDRATE 115200
-#define BAUDRATEREG SYSCLKU/8/BAUDRATE-1
+#define SYSCLKU 16000000L
+#define BAUDRATE 9600
+#define BAUDRATEREG SYSCLKU/64/BAUDRATE-1
 #define UART1_RX_TRIS TRISBbits.TRISB5
 #define UART1_TX_TRIS TRISBbits.TRISB7
 

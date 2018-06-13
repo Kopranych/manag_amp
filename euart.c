@@ -12,24 +12,26 @@ void UART1Init()
     TXSTAbits.TXEN = 1;//включение передачи
     TXSTAbits.SYNC = 0;//асинхронный режим
     TXSTAbits.BRGH = 0;//низкая скорость
+    BAUDCONbits.BRG16 = 0;
+    SPBRG = BAUDRATEREG;
     
-    RCSTAbits.SREN = 1;// включить прием
+    RCSTAbits.SREN = 1;// включение модуля 
     RCSTAbits.RX9 = 0;//бит 9 выключен
-    RCSTAbits.CREN = 1;//
+    RCSTAbits.CREN = 1;//включить прием
     
     /////////////////////////
 }    
 
 
 
-char UART1GetChar()
-{
+//char UART1GetChar()
+//{
 //    char Temp;
 //    while(IFS0bits.U1RXIF == 0);
 //    Temp = U1RXREG;
 //    IFS0bits.U1RXIF = 0;
 //    return Temp;
-}
+//}
 
 void UART1PutChar(char Ch)
 {

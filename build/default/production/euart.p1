@@ -41,6 +41,25 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S133 . . . . . ]
 "3159
 [v _TXSTAbits `VS133 ~T0 @X0 0 e@4012 ]
+"3710
+[s S156 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S156 . ABDEN WUE . BRG16 CKTXP DTRXP RCIDL ABDOVF ]
+"3720
+[s S157 :4 `uc 1 :1 `uc 1 ]
+[n S157 . . SCKP ]
+"3724
+[s S158 :5 `uc 1 :1 `uc 1 ]
+[n S158 . . RXCKP ]
+"3728
+[s S159 :1 `uc 1 :1 `uc 1 ]
+[n S159 . . W4E ]
+"3709
+[u S155 `S156 1 `S157 1 `S158 1 `S159 1 ]
+[n S155 . . . . . ]
+"3733
+[v _BAUDCONbits `VS155 ~T0 @X0 0 e@4024 ]
+"3400
+[v _SPBRG `Vuc ~T0 @X0 0 e@4015 ]
 "2921
 [s S120 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S120 . RX9D OERR FERR ADDEN CREN SREN RX9 SPEN ]
@@ -68,6 +87,33 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TXREG1 `Vuc ~T0 @X0 0 e@4013 ]
 "56 C:\Program Files\Microchip\xc8\v1.45\include\string.h
 [v _strlen `(ui ~T0 @X0 0 ef1`*Cuc ]
+[; ;__size_t.h: 4: typedef unsigned size_t;
+[; ;string.h: 14: extern void * memcpy(void *, const void *, size_t);
+[; ;string.h: 15: extern void * memmove(void *, const void *, size_t);
+[; ;string.h: 16: extern void * memset(void *, int, size_t);
+[; ;string.h: 36: extern char * strcat(char *, const char *);
+[; ;string.h: 37: extern char * strcpy(char *, const char *);
+[; ;string.h: 38: extern char * strncat(char *, const char *, size_t);
+[; ;string.h: 39: extern char * strncpy(char *, const char *, size_t);
+[; ;string.h: 40: extern char * strdup(const char *);
+[; ;string.h: 41: extern char * strtok(char *, const char *);
+[; ;string.h: 44: extern int memcmp(const void *, const void *, size_t);
+[; ;string.h: 45: extern int strcmp(const char *, const char *);
+[; ;string.h: 46: extern int stricmp(const char *, const char *);
+[; ;string.h: 47: extern int strncmp(const char *, const char *, size_t);
+[; ;string.h: 48: extern int strnicmp(const char *, const char *, size_t);
+[; ;string.h: 49: extern void * memchr(const void *, int, size_t);
+[; ;string.h: 50: extern size_t strcspn(const char *, const char *);
+[; ;string.h: 51: extern char * strpbrk(const char *, const char *);
+[; ;string.h: 52: extern size_t strspn(const char *, const char *);
+[; ;string.h: 53: extern char * strstr(const char *, const char *);
+[; ;string.h: 54: extern char * stristr(const char *, const char *);
+[; ;string.h: 55: extern char * strerror(int);
+[; ;string.h: 56: extern size_t strlen(const char *);
+[; ;string.h: 57: extern char * strchr(const char *, int);
+[; ;string.h: 58: extern char * strichr(const char *, int);
+[; ;string.h: 59: extern char * strrchr(const char *, int);
+[; ;string.h: 60: extern char * strrichr(const char *, int);
 [; ;pic18f14k22.h: 50: extern volatile unsigned char SRCON0 @ 0xF68;
 "52 C:\Program Files\Microchip\xc8\v1.45\include\pic18f14k22.h
 [; ;pic18f14k22.h: 52: asm("SRCON0 equ 0F68h");
@@ -2732,66 +2778,45 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic18f14k22.h: 7574: extern volatile __bit nTO @ (((unsigned) &RCON)*8) + 3;
 [; ;pic18f14k22.h: 7576: extern volatile __bit nW @ (((unsigned) &SSPSTAT)*8) + 2;
 [; ;pic18f14k22.h: 7578: extern volatile __bit nWRITE @ (((unsigned) &SSPSTAT)*8) + 2;
-[; ;__size_t.h: 4: typedef unsigned size_t;
-[; ;string.h: 14: extern void * memcpy(void *, const void *, size_t);
-[; ;string.h: 15: extern void * memmove(void *, const void *, size_t);
-[; ;string.h: 16: extern void * memset(void *, int, size_t);
-[; ;string.h: 36: extern char * strcat(char *, const char *);
-[; ;string.h: 37: extern char * strcpy(char *, const char *);
-[; ;string.h: 38: extern char * strncat(char *, const char *, size_t);
-[; ;string.h: 39: extern char * strncpy(char *, const char *, size_t);
-[; ;string.h: 40: extern char * strdup(const char *);
-[; ;string.h: 41: extern char * strtok(char *, const char *);
-[; ;string.h: 44: extern int memcmp(const void *, const void *, size_t);
-[; ;string.h: 45: extern int strcmp(const char *, const char *);
-[; ;string.h: 46: extern int stricmp(const char *, const char *);
-[; ;string.h: 47: extern int strncmp(const char *, const char *, size_t);
-[; ;string.h: 48: extern int strnicmp(const char *, const char *, size_t);
-[; ;string.h: 49: extern void * memchr(const void *, int, size_t);
-[; ;string.h: 50: extern size_t strcspn(const char *, const char *);
-[; ;string.h: 51: extern char * strpbrk(const char *, const char *);
-[; ;string.h: 52: extern size_t strspn(const char *, const char *);
-[; ;string.h: 53: extern char * strstr(const char *, const char *);
-[; ;string.h: 54: extern char * stristr(const char *, const char *);
-[; ;string.h: 55: extern char * strerror(int);
-[; ;string.h: 56: extern size_t strlen(const char *);
-[; ;string.h: 57: extern char * strchr(const char *, int);
-[; ;string.h: 58: extern char * strichr(const char *, int);
-[; ;string.h: 59: extern char * strrchr(const char *, int);
-[; ;string.h: 60: extern char * strrichr(const char *, int);
-[; ;euart.h: 25: void UART1Init();
-[; ;euart.h: 26: char UART1GetChar();
-[; ;euart.h: 27: void UART1PutChar(char Ch);
-[; ;euart.h: 28: void UART1PutStr(char* str);
-"7 euart.c
+[; ;euart.h: 26: void UART1Init();
+[; ;euart.h: 27: char UART1GetChar();
+[; ;euart.h: 28: void UART1PutChar(char Ch);
+[; ;euart.h: 29: void UART1PutStr(char* str);
+"5 euart.c
 [v _UART1Init `(v ~T0 @X0 1 ef ]
-"8
+"6
 {
-[; ;euart.c: 7: void UART1Init()
-[; ;euart.c: 8: {
+[; ;euart.c: 5: void UART1Init()
+[; ;euart.c: 6: {
 [e :U _UART1Init ]
 [f ]
-[; ;euart.c: 9: ANSELHbits.ANS11 = 0;
-"9
+[; ;euart.c: 7: ANSELHbits.ANS11 = 0;
+"7
 [e = . . _ANSELHbits 1 3 -> -> 0 `i `uc ]
-[; ;euart.c: 10: TRISBbits.TRISB7 = 0;
-"10
+[; ;euart.c: 8: TRISBbits.TRISB7 = 0;
+"8
 [e = . . _TRISBbits 0 4 -> -> 0 `i `uc ]
-[; ;euart.c: 11: TRISBbits.TRISB5 = 1;
-"11
+[; ;euart.c: 9: TRISBbits.TRISB5 = 1;
+"9
 [e = . . _TRISBbits 0 2 -> -> 1 `i `uc ]
-[; ;euart.c: 13: TXSTAbits.TX9 = 0;
-"13
+[; ;euart.c: 11: TXSTAbits.TX9 = 0;
+"11
 [e = . . _TXSTAbits 0 6 -> -> 0 `i `uc ]
-[; ;euart.c: 14: TXSTAbits.TXEN = 1;
-"14
+[; ;euart.c: 12: TXSTAbits.TXEN = 1;
+"12
 [e = . . _TXSTAbits 0 5 -> -> 1 `i `uc ]
-[; ;euart.c: 15: TXSTAbits.SYNC = 0;
-"15
+[; ;euart.c: 13: TXSTAbits.SYNC = 0;
+"13
 [e = . . _TXSTAbits 0 4 -> -> 0 `i `uc ]
-[; ;euart.c: 16: TXSTAbits.BRGH = 0;
-"16
+[; ;euart.c: 14: TXSTAbits.BRGH = 0;
+"14
 [e = . . _TXSTAbits 0 2 -> -> 0 `i `uc ]
+[; ;euart.c: 15: BAUDCONbits.BRG16 = 0;
+"15
+[e = . . _BAUDCONbits 0 3 -> -> 0 `i `uc ]
+[; ;euart.c: 16: SPBRG = 16000000L/64/9600-1;
+"16
+[e = _SPBRG -> - / / -> 16000000 `l -> -> 64 `i `l -> -> 9600 `i `l -> -> 1 `i `l `uc ]
 [; ;euart.c: 18: RCSTAbits.SREN = 1;
 "18
 [e = . . _RCSTAbits 0 5 -> -> 1 `i `uc ]
@@ -2804,18 +2829,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;euart.c: 23: }
 "23
 [e :UE 279 ]
-}
-"27
-[v _UART1GetChar `(uc ~T0 @X0 1 ef ]
-"28
-{
-[; ;euart.c: 27: char UART1GetChar()
-[; ;euart.c: 28: {
-[e :U _UART1GetChar ]
-[f ]
-[; ;euart.c: 34: }
-"34
-[e :UE 280 ]
 }
 "36
 [v _UART1PutChar `(v ~T0 @X0 1 ef1`uc ]
@@ -2830,17 +2843,17 @@ Version 3.2 HI-TECH Software Intermediate Code
 [f ]
 [; ;euart.c: 38: while(TXSTAbits.TRMT == 0);
 "38
-[e $U 282  ]
-[e :U 283 ]
+[e $U 281  ]
 [e :U 282 ]
-[e $ == -> . . _TXSTAbits 0 1 `i -> 0 `i 283  ]
-[e :U 284 ]
+[e :U 281 ]
+[e $ == -> . . _TXSTAbits 0 1 `i -> 0 `i 282  ]
+[e :U 283 ]
 [; ;euart.c: 39: TXREG1 = Ch;
 "39
 [e = _TXREG1 _Ch ]
 [; ;euart.c: 40: }
 "40
-[e :UE 281 ]
+[e :UE 280 ]
 }
 "43
 [v _UART1PutStr `(v ~T0 @X0 1 ef1`*uc ]
@@ -2860,8 +2873,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 "46
 {
 [e = _i -> 0 `i ]
-[e $U 289  ]
-[e :U 286 ]
+[e $U 288  ]
+[e :U 285 ]
 {
 [; ;euart.c: 47: UART1PutChar(str[i]);
 "47
@@ -2870,9 +2883,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 }
 "46
 [e ++ _i -> 1 `i ]
-[e :U 289 ]
-[e $ < _i _size 286  ]
-[e :U 287 ]
+[e :U 288 ]
+[e $ < _i _size 285  ]
+[e :U 286 ]
 "48
 }
 [; ;euart.c: 48: }
@@ -2884,5 +2897,5 @@ Version 3.2 HI-TECH Software Intermediate Code
 [e ( _UART1PutChar (1 -> -> 10 `i `uc ]
 [; ;euart.c: 51: }
 "51
-[e :UE 285 ]
+[e :UE 284 ]
 }

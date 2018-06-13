@@ -1,40 +1,5 @@
 
-# 1 "euart.c"
-
-# 4 "C:\Program Files\Microchip\xc8\v1.45\include\__size_t.h"
-typedef unsigned size_t;
-
-# 14 "C:\Program Files\Microchip\xc8\v1.45\include\string.h"
-extern void * memcpy(void *, const void *, size_t);
-extern void * memmove(void *, const void *, size_t);
-extern void * memset(void *, int, size_t);
-
-# 36
-extern char * strcat(char *, const char *);
-extern char * strcpy(char *, const char *);
-extern char * strncat(char *, const char *, size_t);
-extern char * strncpy(char *, const char *, size_t);
-extern char * strdup(const char *);
-extern char * strtok(char *, const char *);
-
-
-extern int memcmp(const void *, const void *, size_t);
-extern int strcmp(const char *, const char *);
-extern int stricmp(const char *, const char *);
-extern int strncmp(const char *, const char *, size_t);
-extern int strnicmp(const char *, const char *, size_t);
-extern void * memchr(const void *, int, size_t);
-extern size_t strcspn(const char *, const char *);
-extern char * strpbrk(const char *, const char *);
-extern size_t strspn(const char *, const char *);
-extern char * strstr(const char *, const char *);
-extern char * stristr(const char *, const char *);
-extern char * strerror(int);
-extern size_t strlen(const char *);
-extern char * strchr(const char *, int);
-extern char * strichr(const char *, int);
-extern char * strrchr(const char *, int);
-extern char * strrichr(const char *, int);
+# 1 "adc.c"
 
 # 50 "C:\Program Files\Microchip\xc8\v1.45\include\pic18f14k22.h"
 extern volatile unsigned char SRCON0 @ 0xF68;
@@ -3694,48 +3659,29 @@ extern volatile __bit nW @ (((unsigned) &SSPSTAT)*8) + 2;
 
 extern volatile __bit nWRITE @ (((unsigned) &SSPSTAT)*8) + 2;
 
-# 26 "euart.h"
-void UART1Init();
-char UART1GetChar();
-void UART1PutChar(char Ch);
-void UART1PutStr(char* str);
+# 20 "adc.h"
+void init_adc(void);
+int read_adc(void);
 
-# 5 "euart.c"
-void UART1Init()
-{
-ANSELHbits.ANS11 = 0;
-TRISBbits.TRISB7 = 0;
-TRISBbits.TRISB5 = 1;
-
-TXSTAbits.TX9 = 0;
-TXSTAbits.TXEN = 1;
-TXSTAbits.SYNC = 0;
-TXSTAbits.BRGH = 0;
-BAUDCONbits.BRG16 = 0;
-SPBRG = 16000000L/64/9600-1;
-
-RCSTAbits.SREN = 1;
-RCSTAbits.RX9 = 0;
-RCSTAbits.CREN = 1;
-
+# 4 "adc.c"
+void init_adc(void){
+TRISAbits.TRISA4 = 1;
+PIR1bits.ADIF = 0;
+ANSELbits.ANS4 = 1;
+ADCON0bits.CHS = 0b0011;
+ADCON1bits.PVCFG = 0;
+ADCON1bits.NVCFG = 0;
+ADCON2bits.ADFM = 1;
+ADCON2bits.ADCS = 0b101;
+ADCON2bits.ACQT = 0b111;
+ADCON0bits.ADON = 1;
 
 }
 
-# 36
-void UART1PutChar(char Ch)
-{
-while(TXSTAbits.TRMT == 0);
-TXREG1 = Ch;
-}
-
-
-void UART1PutStr(char str[]){
-int size = strlen(str);
-int i;
-for(i = 0; i < size;i++){
-UART1PutChar(str[i]);
-}
-UART1PutChar(0xD);
-UART1PutChar(0xA);
+int read_adc(void){
+ADCON0bits.GODONE = 1;
+while((ADCON0bits.GODONE)&&(!PIR1bits.ADIF));
+PIR1bits.ADIF = 0;
+return ADRES;
 }
 

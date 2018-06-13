@@ -1,5 +1,6 @@
 /* 
- * File:   pe42552.h
+ * File:   pe42552.h 
+ * Device switch
  * Author: Kopranov_IN
  *
  * Created on 19 Март 2018 г., 13:32
@@ -14,14 +15,14 @@ extern "C" {
 
 #include <pic18f14k22.h> 
  
-#define PE42552_TRIS TRISCbits.RC0
-#define PE42552_PORT PORTCbits.C2INP
-#define RFC_RF1 1
-#define RFC_RF2 0
+#define SWITCH_TRIS TRISCbits.RC2
+#define SWITCH_PORT PORTCbits.RC2
+#define EN_AMP 1
+#define DIS_AMP 0
 
 ///////////////////////////////////////////////
-void init_switch_PE42552(void);
-void switch_PE42552(int com_switch);
+void init_switch(void);
+void switching(int com_switch);
 
 
 #ifdef	__cplusplus
