@@ -1,7 +1,20 @@
 /* 
+ * Файл с основным методом main, контроллер принимает по uart команды и выполняет управление переферией 
+ * прием по uart реализован через обработку прерывания. Команда начинается с символа "*" и заканчивается символом "%"
+ * далее по switch идет выполнение команды
+ * работа по uart отлажена на другом контроллере PIC24 перенес сюда, здесь не было возможности проверить
+ * Так же написал код для других модулей но ничего не проверено и не отлажено: 
+ * adc.c - АЦП, функция инициализации init_adc() и функция чтения read_adc() с АЦП; 
+ * pe4312.c - аттенюатор, управление осуществляется через SPI так же как и термодатчик, функция 
+ * инициализации init_att() - инициализируется интерфейс SPI, функции spi_txrx_att1(), spi_txrx_att2() - управление 
+ * аттенюаторами, valid_ps () - проверка включен ли последовательный режим управления
+ * LM95071.c - термодатчик, чтение данных осуществляется через SPI, функция инициализации init_td()(инициализация SPI 
+ * проходит через init_att() в pe4312.c) и функция чтения данных read_td();
+ * pe42552.c - переключатель, функции инициализации init_switch(), и переключения switching();
  * File:   main_key.c
  * Author: Kopranov_IN
  *
+ * 
  * Created on 15 Март 2018 г., 13:09
  */
 
@@ -19,8 +32,7 @@
 #define OFF 0
 #define FIRST_COM_INX 1
 #define INVALID_COM 2
-#define SERIAL_BIT_TRIS TRISAbits.RA5
-#define SERIAL_BIT_READ PORTAbits.RA5
+
 
 // #pragma config statements should precede project file includes.
 // Use project enums instead of #define for ON and OFF.
@@ -82,7 +94,7 @@
 char tmprecive;
 char array_char[MAX_STR_SIZE];
 char start_str = '*';
-char end_str = '#';
+char end_str = '%';
 char switch_amp;
 char attenuator[2];
 char temp;
@@ -90,6 +102,7 @@ int index_recive = 0;
 int read_en = OFF;
 bool isReciver = false;
 ///////////////////////////////////////////////////
+//обработчик прерывания
 void interrupt high_isr (void){
     if(PIR1bits.RCIF){//если прерывание от eusart1
         tmprecive = RCREG1;
@@ -114,12 +127,12 @@ void interrupt high_isr (void){
 void init_controller(void);
 void init_interrupt(void);
 void init_IO_port(void);
-//void sleep(void);
+
 ////////////////////////////////////////////////////
 
 int main(int argc, char** argv) {
     
-    
+    init_controller();
 //    UART1PutStr("Device is ready!");
 //    UART1PutStr("Send command in format:");
 //    UART1PutStr("* - command start character, enable/disable amplifier"
@@ -130,8 +143,7 @@ int main(int argc, char** argv) {
     
     while(1){
 
-while(1){
-//        sleep();
+
         if(isReciver == true){//если пришли данные по eusart
             isReciver = false;
             //парсим строку
@@ -141,7 +153,7 @@ while(1){
             
             switch(switch_amp){
                  case '0'://выполнить установку всей доступной переферии
-                    UART1PutStr("1|0");
+                    UART1PutStr("1|0");//отправляю команды на комп для отладки интерфейса
                     UART1PutStr("2|0");
                     UART1PutStr("3|6");
                     UART1PutStr("4|13");
@@ -150,29 +162,25 @@ while(1){
                     break;
                 case '1'://вкл/выкл усилитель
                     temp = array_char[2];
-                    if(read_led(VD1)){
-                        led_off(VD1);
+                    
                         UART1PutStr("1|0"); 
 //                    switch_PE42552(switch_amp);
 //                    attenuator_PE4312(attenuator);
-                    }else{
-                        led_on(VD1);
+                    
                         UART1PutStr("1|1");
 //                    UART1PutStr(attenuator);
-                    }                   
+                                     
                     break;
                 case '2'://вкл/выкл предусилитель
 //                   temp = array_char[2];
-                    if(read_led(VD2)){
-                        led_off(VD2);
+                    
                         UART1PutStr("2|0"); 
 //                    switch_PE42552(switch_amp);
 //                    attenuator_PE4312(attenuator);
-                    }else{
-                        led_on(VD2);
+                    
                         UART1PutStr("2|1");
 //                    UART1PutStr(attenuator);
-                    }                   
+                                      
                     break;
                 case '3'://первый аттенюатор
                     UART1PutStr("3|31.5");
@@ -190,26 +198,25 @@ while(1){
                     break;     
                 default:
                     UART1PutStr("Invalid command!");
-                    UART1PutStr("Send command in format:");
-                    UART1PutStr("* - command start character, enable/disable amplifier"
-                            "(0 - disable, 1 - enable), space,"
-                    "attenuator in decibel (0.5 dB steps to 31.5 dB), % - command completion character.");
-                    UART1PutStr("Example: '*1 30%'.");
-                    UART1PutStr(" Means enable amplifier, attenuator value 30 decibels.");
+                    
             }
         }
     }
     return (EXIT_SUCCESS);
 }
 
+//инициализация контроллера
 void init_controller(void){
     init_IO_port();
     init_interrupt();
-    init_switch();
     UART1Init();
-    init_spi();
+    init_switch();    
+    init_att();
+    init_td();
+    init_adc();
 }
 
+//инициализация прерываний
 void init_interrupt(void){
     INTCONbits.GIE = 1; //разрешаем глобальные прерывания
     INTCONbits.PEIE = 1;//разрешаем прерывания переферии
@@ -217,16 +224,10 @@ void init_interrupt(void){
 //    RCONbits.IPEN = 1;//включаем приоритеты прерываний
 }
 
+//инициализация выводов
 void init_IO_port(void){
     ANSELbits.ANSEL = 0;//все порты 
     ANSELHbits.ANSELH = 0;//цифровые
-    
-    SERIAL_BIT_TRIS = 1;//pin as input
-    SERIAL_BIT_READ = 0;
-
 }
 
-void test(){
-    PORTAbits.RA2 = 1;
-    PORTAbits.RA2 = 0;
-}
+

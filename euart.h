@@ -23,10 +23,10 @@ extern "C" {
 #define UART1_TX_TRIS TRISBbits.TRISB7
 
     
-void UART1Init();
-char UART1GetChar();
-void UART1PutChar(char Ch);
-void UART1PutStr(char* str);
+void UART1Init();//инициализация 
+//char UART1GetChar();
+void UART1PutChar(char Ch);//передача одного символа
+void UART1PutStr(char* str);//передача строки
 
 #ifdef	__cplusplus
 }

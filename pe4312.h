@@ -26,6 +26,10 @@ extern "C" {
 #define SPI_SCK_TRIS TRISBbits.RB6
 #define SPI_SDI_TRIS TRISBbits.RB4   
 
+void init_att(void);
+unsigned int spi_txrx_att1(unsigned int data);
+unsigned int spi_txrx_att2(unsigned int data);
+_Bool valid_ps (void);
 
 #ifdef	__cplusplus
 }

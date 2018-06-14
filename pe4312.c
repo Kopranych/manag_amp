@@ -2,9 +2,10 @@
 
 
 
-void init_pe4312()
+void init_att()
 {
     PS_ATT_TRIS = 1;
+    PS_ATT_PORT = 0;
     LE_ATT1_TRIS = 0;
     LE_ATT2_TRIS = 0;
     SPI_SDO_TRIS = 0;
@@ -39,7 +40,7 @@ unsigned int spi_txrx_att2(unsigned int data){
     return temp;
 }
 
-unsigned int valid_ps ()
+_Bool valid_ps ()
 {
     if(PS_ATT_PORT){
         return true;
